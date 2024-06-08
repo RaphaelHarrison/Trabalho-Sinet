@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho e Pagamento</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #222222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 80%;
+            gap: 40px; /* Adicionado espaçamento entre as telas */
+        }
+
+        .cart-container,
+        .payment-container {
+            width: 48%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+
+        h1 {
+            color: #222;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .total {
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: right;
+            width: 100%;
+        }
+
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+            text-decoration: none; /* Remove underline from links */
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .payment-form {
+            text-align: center;
+            width: 100%;
+        }
+
+        .payment-form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .payment-form input[type="text"] {
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .payment-images {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* Espaçamento entre as imagens */
+            margin-top: 20px;
+        }
+
+        .payment-images img {
+            width: 35%; /* Diminui o tamanho das imagens */
+            height: auto;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .payment-images {
+            display: flex;
+            flex-wrap: wrap; /* Permitir que os itens quebrem para a próxima linha */
+            justify-content: center; /* Centralizar os itens horizontalmente */
+            gap: 20px; /* Espaçamento entre as imagens */
+            margin-top: 20px;
+}
+
+        .finish-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1rem;
+            text-decoration: none; /* Remove underline from links */
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .finish-button:hover {
+            background-color: #45a049;
+        }
+
+        #cart-items {
+            width: 100%;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cart-container">
+            <h1>Carrinho</h1>
+            <div id="cart-items"></div>
+            <div id="total-section" class="total">
+                Total: R$ <span id="total-price">0.00</span>
+            </div>
+            <div class="buttons-container">
+                <a href="javascript:void(0);" class="button" onclick="clearCart()">Limpar Carrinho</a>
+                <a href="index_logado.html" class="button">Continuar Comprando</a>
+            </div>
+        </div>
+
+        <div class="payment-container">
+            <h1>Pagamento</h1>
+            <div class="payment-form">
+                <label for="cpf">CPF</label>
+                <input type="text" id="cpf" name="cpf" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="123.456.789-01" required>
+
+                <label for="payment-method">Método de Pagamento</label>
+                <div class="payment-images">
+                    <img src="/sinetv2/photos/picpay.png" alt="PicPay">
+                    <img src="/sinetv2/photos/nubank.png" alt="Nubank">
+                    <img src="/sinetv2/photos/qrcode.png" alt="QR Code 1">
+                    <img src="/sinetv2/photos/qrcode.png" alt="QR Code 2">
+                </div>
+            </div>
+            <a href="index_logado.html" class="finish-button" onclick="finishPurchase()">Finalizar Compra</a>
+        </div>
+    </div>
+    
+    <script>
+        function finishPurchase() {
+            
+            clearCart(); // Limpar o carrinho após a compra
+        }
+
+        function displayatc() {
+            let carrinhocheio = 0;
+            let totalcarrinho = document.querySelector('#total-price');
+            let carrinho2 = document.querySelector('#cart-items');
+            let carrinhoOutraPag = JSON.parse(localStorage.getItem('cartItems')) || [];
+            carrinho2.innerHTML = ''; // Limpar o conteúdo existente
+            carrinhoOutraPag.forEach(item => {
+                carrinho2.innerHTML += `
+                    <div style="display: flex; gap:10px; border-bottom: 1px solid black; font-weight: bold; align-items: center;" class="cart-item">
+                        <p style="justify-self:start">${item.nome}</p>
+                        <p class="preco">${item.preco}</p>
+                        <p style="background-color: blue; padding: 2.5px; border-radius: 30%; color: #fff"> ${item.quantidade}</p>
+                    </div>
+                `;
+                let pricereal = item.preco.replace(/\D/g, "");
+                carrinhocheio += (Number(pricereal) * item.quantidade);
+            });
+            totalcarrinho.textContent = carrinhocheio.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            displayatc(); // Chamar a função para exibir o carrinho
+        });
+
+        function clearCart() {
+            localStorage.removeItem('cartItems');
+            // Limpar o carrinho na interface do usuário
+            document.querySelector('#cart-items').innerHTML = ""; // Limpar os itens do carrinho
+            document.querySelector('#total-price').textContent = "0.00"; // Zerar o total do carrinho
+        }
+    </script>
+</body>
+</html>

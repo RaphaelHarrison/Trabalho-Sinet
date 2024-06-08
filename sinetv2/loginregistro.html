@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Login e Registro</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #222222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+        }
+        .container {
+            display: flex;
+            width: 50vh;
+            justify-content: space-around;
+            flex-direction: column;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            gap: 40px; /* Espaço entre os formulários */
+        }
+        .form-container {
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            color: #222222;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form__group {
+            position: relative;
+            padding: 15px 0 0;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .form__field {
+            font-family: inherit;
+            width: 100%;
+            border: 0;
+            border-bottom: 2px solid #9b9b9b;
+            outline: 0;
+            font-size: 1.3rem;
+            color: #fff;
+            padding: 7px 0;
+            background: transparent;
+            transition: border-color 0.2s;
+        }
+        .form__field::placeholder {
+            color: transparent;
+        }
+        .form__field:placeholder-shown ~ .form__label {
+            font-size: 1.3rem;
+            cursor: text;
+            top: 20px;
+        }
+        .form__label {
+            position: absolute;
+            top: 0;
+            display: block;
+            transition: 0.2s;
+            font-size: 1rem;
+            color: #9b9b9b;
+        }
+        .form__field:focus ~ .form__label {
+            position: absolute;
+            top: 0;
+            display: block;
+            transition: 0.2s;
+            font-size: 1rem;
+            color: #11998e;
+            font-weight: 700;    
+        }
+        .form__field:focus {
+            padding-bottom: 6px;  
+            font-weight: 700;
+            border-width: 3px;
+            border-image: linear-gradient(to right, #11998e, #38ef7d);
+            border-image-slice: 1;
+        }
+        .form__field:required, .form__field:invalid {
+            box-shadow: none;
+        }
+        input[type="text"], input[type="password"] {
+            color: black;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .popup {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #555;
+            color: #ffffff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+        .popup.show {
+            visibility: visible;
+            animation: fadeout 3s forwards;
+        }
+        @keyframes fadeout {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Registro</h2>
+            <form action="register_process.php" method="post">
+                <div class="form__group">
+                    <input type="text" class="form__field" id="email" name="email" required placeholder="Email">
+                    <label for="email" class="form__label">Email:</label>
+                </div>
+                <div class="form__group">
+                    <input type="text" class="form__field" id="cpf" name="cpf" required placeholder="CPF">
+                    <label for="cpf" class="form__label">CPF:</label>
+                </div>
+                <div class="form__group">
+                    <input type="password" class="form__field" id="senha" name="senha" required placeholder="Senha">
+                    <label for="senha" class="form__label">Senha:</label>
+                </div>
+                <div class="form__group">
+                    <input type="text" class="form__field" id="cep" name="cep" required placeholder="CEP">
+                    <label for="cep" class="form__label">CEP:</label>
+                </div>
+                <div class="form__group">
+                    <input type="text" class="form__field" id="endereco" name="endereco" required placeholder="Endereco">
+                    <label for="endereco" class="form__label">Endereco:</label>
+                </div>
+                <input type="submit" value="Registrar">
+            </form>
+        </div>
+        <div class="form-container">
+            <h2>Login</h2>
+            <form action="login_process.php" method="post">
+                <div class="form__group">
+                    <input type="text" class="form__field" id="email1" name="email" required placeholder="Email">
+                    <label for="email1" class="form__label">Email:</label>
+                </div>
+                <div class="form__group">
+                    <input type="password" class="form__field" id="senha2" name="senha" required placeholder="Senha">
+                    <label for="senha2" class="form__label">Senha:</label>
+                </div>
+                <input type="submit" value="Entrar">
+            </form>
+        </div>
+    </div>
+
+    <div id="popup" class="popup"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var params = new URLSearchParams(window.location.search);
+            var message = params.get("message");
+            if (message) {
+                var popup = document.getElementById("popup");
+                popup.innerText = message;
+                popup.classList.add("show");
+                setTimeout(function() {
+                    popup.classList.remove("show");
+                }, 10000); // 10 segundos
+            }
+        });
+    </script>
+</body>
+</html>

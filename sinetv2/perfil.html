@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+    <style>
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #222222;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .container {
+            width: 10000px;
+            max-width: 50vh;
+            background-color: #fff;
+            color: #222222;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px; /* Espaço entre os formulários */
+        }
+
+        h1 {
+            text-align: center;
+            color: #222222;
+        }
+
+        #profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        strong {
+            font-weight: bold;
+            color: #333;
+        }
+
+        span {
+            color: #666;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .form__group {
+            position: relative;
+            padding: 15px 0 0;
+            width: 100%;
+        }
+
+        .form__field {
+            font-family: inherit;
+            width: 100%;
+            border: 0;
+            border-bottom: 2px solid #9b9b9b;
+            outline: 0;
+            font-size: 1.3rem;
+            color: #222222;
+            padding: 7px 0;
+            background: transparent;
+            transition: border-color 0.2s;
+        }
+
+        .form__field::placeholder {
+            color: transparent;
+        }
+
+        .form_field:placeholder-shown ~ .form__label {
+            font-size: 1.3rem;
+            cursor: text;
+            top: 20px;
+        }
+
+        .form__label {
+            position: absolute;
+            top: 0;
+            display: block;
+            transition: 0.2s;
+            font-size: 1rem;
+            color: #9b9b9b;
+        }
+
+        .form_field:focus ~ .form_label {
+            position: absolute;
+            top: 0;
+            display: block;
+            transition: 0.2s;
+            font-size: 1rem;
+            color: #11998e;
+            font-weight: 700;
+        }
+
+        .form__field:focus {
+            padding-bottom: 6px;
+            font-weight: 700;
+            border-width: 3px;
+            border-image: linear-gradient(to right, #11998e, #38ef7d);
+            border-image-slice: 1;
+        }
+
+        input[type="submit"], button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        input[type="submit"]:hover, button:hover {
+            background-color: #45a049;
+        }
+
+        .popup {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            background-color: #555;
+            color: #ffffff;
+            text-align: center;
+            border-radius: 2px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1;
+            left: 50%;
+            bottom: 30px;
+            font-size: 17px;
+        }
+
+        .popup.show {
+            visibility: visible;
+            animation: fadeout 3s forwards;
+        }
+
+        @keyframes fadeout {
+            0% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        .button {
+            margin-top: -10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Perfil do Usuário</h1>
+        <div id="profile-info">
+            <div class="form__group">
+                <strong>Email:</strong> 
+                <span id="email">exemplo@dominio.com</span>
+                <input type="text" id="email-input" class="form__field hidden" placeholder="Email">
+                <label for="email-input" class="form__label"></label>
+            </div>
+            <div class="form__group">
+                <strong>CPF:</strong> 
+                <span id="cpf">123.456.789-00</span>
+                <input type="text" id="cpf-input" class="form__field hidden" placeholder="CPF">
+                <label for="cpf-input" class="form__label"></label>
+            </div>
+            <div class="form__group">
+                <strong>CEP:</strong> 
+                <span id="cep">12345-678</span>
+                <input type="text" id="cep-input" class="form__field hidden" placeholder="CEP">
+                <label for="cep-input" class="form__label"></label>
+            </div>
+            <div class="form__group">
+                <strong>Endereço:</strong> 
+                <span id="endereco">Rua Exemplo, 123</span>
+                <input type="text" id="endereco-input" class="form__field hidden" placeholder="Endereço">
+                <label for="endereco-input" class="form__label"></label>
+            </div>
+        </div>
+        <button class="button" id="edit-button">Editar Dados</button>
+        <button id="save-button" class="hidden">Salvar Dados</button>
+        <button class="button" id="back-button">Voltar</button>
+
+    </div>
+
+    <script>
+        document.getElementById('edit-button').addEventListener('click', function() {
+            document.getElementById('edit-button').classList.add('hidden');
+            document.getElementById('save-button').classList.remove('hidden');
+            
+            document.getElementById('email').classList.add('hidden');
+            document.getElementById('cpf').classList.add('hidden');
+            document.getElementById('cep').classList.add('hidden');
+            document.getElementById('endereco').classList.add('hidden');
+
+            document.getElementById('email-input').classList.remove('hidden');
+            document.getElementById('cpf-input').classList.remove('hidden');
+            document.getElementById('cep-input').classList.remove('hidden');
+            document.getElementById('endereco-input').classList.remove('hidden');
+
+            document.getElementById('email-input').value = document.getElementById('email').textContent;
+            document.getElementById('cpf-input').value = document.getElementById('cpf').textContent;
+            document.getElementById('cep-input').value = document.getElementById('cep').textContent;
+            document.getElementById('endereco-input').value = document.getElementById('endereco').textContent;
+        });
+
+        document.getElementById('save-button').addEventListener('click', function() {
+            const userId = getCookie('user_id');
+
+            if (!userId) {
+                alert('ID da conta não encontrado. Faça o login novamente.');
+                return;
+            }
+
+            const email = document.getElementById('email-input').value;
+            const cpf = document.getElementById('cpf-input').value;
+            const cep = document.getElementById('cep-input').value;
+            const endereco = document.getElementById('endereco-input').value;
+
+            const data = {
+                user_id: userId,
+                email: email,
+                cpf: cpf,
+                cep: cep,
+                endereco: endereco
+            };
+
+            fetch('atualizar_dados.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Dados atualizados com sucesso!');
+                    
+                    document.getElementById('email').textContent = email;
+                    document.getElementById('cpf').textContent = cpf;
+                    document.getElementById('cep').textContent = cep;
+                    document.getElementById('endereco').textContent = endereco;
+
+                    document.getElementById('email').classList.remove('hidden');
+                    document.getElementById('cpf').classList.remove('hidden');
+                    document.getElementById('cep').classList.remove('hidden');
+                    document.getElementById('endereco').classList.remove('hidden');
+
+                    document.getElementById('email-input').classList.add('hidden');
+                    document.getElementById('cpf-input').classList.add('hidden');
+                    document.getElementById('cep-input').classList.add('hidden');
+                    document.getElementById('endereco-input').classList.add('hidden');
+
+                    document.getElementById('edit-button').classList.remove('hidden');
+                    document.getElementById('save-button').classList.add('hidden');
+                    window.location.href = 'index_logado.html';
+                    
+                } else {
+                    alert('Falha ao atualizar os dados: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao atualizar os dados.');
+            });
+        });
+
+        document.getElementById('back-button').addEventListener('click', function() {
+        window.location.href = 'index_logado.html';
+        })
+        // Função para obter o valor de um cookie
+        function getCookie(name) {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    return cookie.substring(name.length + 1);
+                }
+            }
+            return null;
+        }
+    </script>
+    <script src="scripts/perfil.js"></script>
+</body>
+</html>
